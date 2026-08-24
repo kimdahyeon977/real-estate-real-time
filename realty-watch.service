@@ -1,0 +1,15 @@
+[Unit]
+Description=안양역 매물 감시 봇
+After=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/realty-watch
+ExecStart=%h/realty-watch/run.sh
+Restart=always
+RestartSec=30
+StandardOutput=append:%h/realty-watch/watcher.log
+StandardError=append:%h/realty-watch/watcher.log
+
+[Install]
+WantedBy=default.target

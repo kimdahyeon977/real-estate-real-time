@@ -1,0 +1,35 @@
+poll:
+  interval_seconds: 45      # 하한 30 — 그 이하는 차단 위험
+  jitter_seconds: 15
+
+notify:
+  discord_webhook: "https://discord.com/api/webhooks/REPLACE_ME"
+  cold_start_silent: true   # 최초 1회는 알림 없이 기준선만 저장
+  deadman_failures: 5       # 연속 실패 N회면 "감시 중단됨" 경보
+
+watches:
+  # 방법 A — 특정 단지만 감시 (가장 빠르고 요청도 적다)
+  # complexNumber는 https://fin.land.naver.com/complexes/<번호> 의 번호다.
+  - name: "개포우성1,2차 매매/전세"
+    source: naver
+    complex_numbers: [65]
+    trade_types: [매매, 전세]
+    price_max: 700000       # 만원 단위 (700000만 = 70억)
+
+  # 방법 B — 법정동 전체 감시 (동 안의 단지를 모두 순회하므로 요청이 많다)
+  - name: "대치동 전세"
+    source: naver
+    cortar_no: "1168010600"
+    real_estate_types: [아파트]
+    trade_types: [전세]
+    price_min: 30000
+    price_max: 200000
+    area_min_m2: 59
+    exclude_keywords: ["반지하", "융자"]
+
+  # 당근부동산은 동 지도 페이지 경로를 그대로 쓴다.
+  - name: "석수동 당근 직거래"
+    source: karrot
+    region_path: "경기도/안양시 만안구/석수동"
+    trade_types: [월세, 전세]
+    price_max: 5000
